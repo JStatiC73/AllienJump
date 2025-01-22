@@ -1,15 +1,34 @@
 extends CharacterBody2D
 
+class_name Player
+
+@onready var animator = $AnimatedSprite2D
 @export var speed = 300
+@export var gravity = 15.0
+@export var jump_velocity = -800
+var max_fall_velocity = 1000.0
 var viewport_size
 
 func _ready():
 	viewport_size = get_viewport_rect().size
 	
 func _process(delta):
-	pass
+	if velocity.y > 0:
+		if animator.animation != "jump":
+			print(animator.animation)
+			animator.play("jump")
+	else:
+		if velocity.y < 0:
+			if animator.animation != "idle_1":
+				print(animator.animation)
+				animator.play("idle_1")
 	
 func _physics_process(delta):
+	velocity.y += gravity
+	if velocity.y > max_fall_velocity:
+		velocity.y = max_fall_velocity
+	
+	
 	var direction = Input.get_axis("move_left", "move_right")
 	if direction:
 		velocity.x = direction * speed
@@ -24,3 +43,6 @@ func _physics_process(delta):
 		
 	if global_position.x < -margin:
 		global_position.x = viewport_size.x + margin
+
+func jump():
+	velocity.y = jump_velocity
