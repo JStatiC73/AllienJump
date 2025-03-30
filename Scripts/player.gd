@@ -14,14 +14,13 @@ func _ready():
 	
 func _process(delta):
 	if velocity.y > 0:
-		if animator.animation != "jump":
-			print(animator.animation)
-			animator.play("jump")
+		if animator.animation != "fall":
+			animator.play("fall")
+			#print(animator.animation)
 	else:
-		if velocity.y < 0:
-			if animator.animation != "idle_1":
-				print(animator.animation)
-				animator.play("idle_1")
+		if animator.animation != "jump":
+			animator.play("jump")
+			#print(animator.animation)
 	
 func _physics_process(delta):
 	velocity.y += gravity

@@ -1,8 +1,9 @@
-[gd_scene load_steps=42 format=3 uid="uid://d0ntc1yw3155e"]
+[gd_scene load_steps=43 format=3 uid="uid://d0ntc1yw3155e"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_kfxwd"]
 [ext_resource type="Texture2D" uid="uid://bmmqi72mp1c22" path="res://Assets/textures/character/Allien_idle_1.png" id="1_n0vix"]
 [ext_resource type="Texture2D" uid="uid://da58atihs85on" path="res://Assets/textures/character/Allien_idle_02.png" id="2_fadmx"]
+[ext_resource type="Texture2D" uid="uid://d3chp2jgj70fr" path="res://Assets/textures/character/Allien_fall.png" id="2_xn10a"]
 [ext_resource type="Texture2D" uid="uid://cvn4bo7n1bnag" path="res://Assets/textures/character/Allien_jump.png" id="3_4tbqx"]
 [ext_resource type="Texture2D" uid="uid://c8naeqq3j8l5t" path="res://Assets/textures/character/Allien_jump_left.png" id="4_3pxbr"]
 [ext_resource type="Texture2D" uid="uid://dnwi8jsenqyux" path="res://Assets/textures/character/Allien_jump_right.png" id="5_jlkmq"]
@@ -141,6 +142,14 @@ region = Rect2(384, 0, 64, 68)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5f55a"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xn10a")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_pvb34")
@@ -288,5 +297,5 @@ animation = &"idle_1"
 autoplay = "idle_1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(8, -7.25)
+position = Vector2(10, -3)
 shape = SubResource("RectangleShape2D_ehxhg")

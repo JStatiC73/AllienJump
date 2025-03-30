@@ -2,13 +2,12 @@
 
 [ext_resource type="Script" path="res://Scripts/game.gd" id="1_8ibyy"]
 [ext_resource type="PackedScene" uid="uid://d0ntc1yw3155e" path="res://Scenes/player.tscn" id="2_x6ns7"]
-[ext_resource type="PackedScene" uid="uid://da5fjvpynsm77" path="res://Scenes/platform.tscn" id="3_r0vs1"]
+[ext_resource type="PackedScene" uid="uid://pre2pnpm6nk8" path="res://Scenes/level_generator.tscn" id="3_o45aa"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_8ibyy")
 
 [node name="Player" parent="." instance=ExtResource("2_x6ns7")]
-position = Vector2(248, -1)
+position = Vector2(237, 839)
 
-[node name="Platform" parent="." instance=ExtResource("3_r0vs1")]
-position = Vector2(266, 777)
+[node name="LevelGenerator" parent="." instance=ExtResource("3_o45aa")]
