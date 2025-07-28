@@ -2,6 +2,7 @@ extends Node
 
 @onready var game = $Game
 @onready var screens = $Screens
+@onready var iap_manager = $IAPManager
 
 var game_in_progress = false
 
@@ -13,6 +14,7 @@ func _ready():
 	game.hud.game_paused.connect(_on_game_paused)
 	
 	#region	IAP signal
+	iap_manager.unlock_new_skin.connect(_iap_manager_unlock_new_skin)
 	screens.purchase_skin.connect(_on_screens_purchase_skin)
 	#endregion
 	
@@ -46,6 +48,13 @@ func _on_window_event(event):
 		DisplayServer.WINDOW_EVENT_CLOSE_REQUEST:
 			get_tree().quit()
 
-func _on_screens_purchase_skin():
+
+#region IAP Signal 
+func _iap_manager_unlock_new_skin():
 	if game.new_skin == false :
 		game.new_skin = true
+		print("Unlocking the new skin...")
+		
+func _on_screens_purchase_skin():
+	iap_manager.purchase_skin()
+#endregion
