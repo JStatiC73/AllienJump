@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="JumperAllien"
-run/main_scene="res://Scenes/game.tscn"
+run/main_scene="res://Scenes/main.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+MyUtility="*res://Scripts/utility.gd"
+SoundFX="*res://Scenes/sound_fx.tscn"
 
 [display]
 
@@ -22,6 +27,11 @@ window/size/viewport_height=960
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_width"
 window/handheld/orientation=1
+
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
 
 [input]
 
@@ -62,3 +72,4 @@ pointing/emulate_touch_from_mouse=true
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

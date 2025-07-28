@@ -16,9 +16,11 @@ func _ready():
 	viewport_size = get_viewport_rect().size
 	generated_platform_count = 0
 	start_platform_y = viewport_size.y - (y_distance_between_platforms)
+	
+func start_generation():
 	generate_level(start_platform_y, true)
 
-func _process(delta):
+func _process(_delta):
 	if(player):
 		var player_y_possition = player.global_position.y
 		var end_of_level_pos = start_platform_y - (generated_platform_count * y_distance_between_platforms)
@@ -60,3 +62,9 @@ func generate_level(start_y: float, generate_ground: bool):
 		create_platform(location)
 		generated_platform_count += 1
 	#endregion
+
+func reset_level():
+	for platform in platformParent.get_children():
+		platform.queue_free()
+
+	generated_platform_count = 0
