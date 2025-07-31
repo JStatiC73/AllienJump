@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 MyUtility="*res://Scripts/utility.gd"
 SoundFX="*res://Scenes/sound_fx.tscn"
+BillingClient="*res://addons/GodotGooglePlayBilling/BillingClient.gd"
 
 [display]
 
@@ -32,6 +33,10 @@ window/handheld/orientation=1
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotGooglePlayBilling/plugin.cfg")
 
 [input]
 
