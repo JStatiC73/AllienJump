@@ -1,6 +1,6 @@
 extends Node2D
 
-signal player_died(score, highScore)
+signal player_died(score, scoreList, isHighScore)
 
 @onready var level_generator = $LevelGenerator
 @onready var ground_sprite = $GroudSprite
@@ -19,7 +19,7 @@ var player_spawn_position: Vector2
 var viewport_size: Vector2
 var score: int = 0
 var highScore: int = 0
-
+var scores = []
 var new_skin = false
 
 func _ready():
@@ -29,7 +29,7 @@ func _ready():
 	player_spawn_position.y = viewport_size.y - player_spawn_pos_y_offset
 	
 	ground_sprite.global_position.x = viewport_size.x / 2.0
-	ground_sprite.global_position.y = viewport_size.y + 25 #margen para mostrar el suelo no tan alejado 
+	ground_sprite.global_position.y = viewport_size.y + 90 #margen para mostrar el suelo no tan alejado 
 	#de las plataformas que conforman el suelo
 	print("view port size:", viewport_size.y)
 	print("ground position: ", ground_sprite.global_position.y)
@@ -58,8 +58,8 @@ func setup_parralax_layer(parallax_layer: ParallaxLayer):
 		parallax_sprite.scale = get_parallax_sprite_scale(parallax_sprite)
 		var my = parallax_sprite.scale.y * parallax_sprite.get_texture().get_height()
 		parallax_layer.motion_mirroring.y = my
-		print(parallax_sprite.scale)
-		print(parallax_layer.motion_mirroring.y)
+		print("paralax scale: " + str(parallax_sprite.scale))
+		print("paralax mirroring: " + str(parallax_layer.motion_mirroring.y))
 	
 	
 func _process(_delta):
@@ -73,6 +73,7 @@ func _process(_delta):
 		if score < int(viewport_size.y - player.global_position.y):
 			score = int(viewport_size.y - player.global_position.y)
 			hud.set_score(score)
+			level_generator.set_player_score(score)
 	
 func new_game():
 	reset_game()
@@ -100,11 +101,9 @@ func new_game():
 
 func _on_player_died():
 	hud.visible = false
-	if score > highScore:
-		highScore = score
-		save_score()
+	var isHighScore = is_high_score(score)	
 		
-	player_died.emit(score, highScore)
+	player_died.emit(score, scores, isHighScore)
 
 func reset_game():
 	ground_sprite.visible = false
@@ -120,15 +119,35 @@ func reset_game():
 		camera.queue_free()
 		camera = null
 
+func is_high_score(playerScore: int):
+	if scores.size() < 10:
+		return true
+	else:
+		var min_score = scores[-1]["score"]
+		return playerScore > min_score
+		
+func save_player_name(player_name, player_score):
+	scores.append({"name": player_name, "score": str(player_score)})
+	scores.sort_custom(func(a, b): return b["score"] < a["score"])
+	print("sorted scores:", scores)
+	if scores.size() > 10:
+		scores = scores.slice(0, 10)
+	save_score()
+	return scores
+
 func save_score():
 	var file = FileAccess.open(save_file_path, FileAccess.WRITE)
-	file.store_var(highScore)
+	file.store_string(JSON.stringify(scores))
 	file.close()
 	
 func load_score():
 	if(FileAccess.file_exists(save_file_path)):
 		var file = FileAccess.open(save_file_path, FileAccess.READ)
-		highScore = file.get_var()
+		var content = file.get_as_text()
+		if(content != ""):
+			var result = JSON.parse_string(content)
+			if(typeof(result) == TYPE_ARRAY):
+				scores = result
 		file.close()
 	else:
-		highScore = 0
+		scores = []

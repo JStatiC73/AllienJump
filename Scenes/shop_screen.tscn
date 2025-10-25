@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bf70v0n17ww68"]
+[gd_scene load_steps=11 format=3 uid="uid://bf70v0n17ww68"]
 
 [ext_resource type="Script" path="res://Scripts/base_screen.gd" id="1_wmmvv"]
 [ext_resource type="Texture2D" uid="uid://bj3d5u4slkmlq" path="res://Assets/textures/ui/Box01.png" id="2_cj7ar"]
 [ext_resource type="PackedScene" uid="uid://cm1glve212onm" path="res://Scenes/screen_button.tscn" id="3_bus4f"]
+[ext_resource type="FontFile" uid="uid://cexr5o02afdda" path="res://Assets/fonts/Tiny5-Regular.ttf" id="3_y1boi"]
 [ext_resource type="Texture2D" uid="uid://36j08h2mhqmt" path="res://Assets/textures/ui/Closebtn2.png" id="4_o68bf"]
 [ext_resource type="Texture2D" uid="uid://dd285k073a2en" path="res://Assets/textures/ui/Box04.png" id="5_8oktc"]
 [ext_resource type="Texture2D" uid="uid://40fs8atw6om5" path="res://Assets/textures/character/Allien_pink.png" id="6_ywru7"]
@@ -10,9 +11,18 @@
 [sub_resource type="LabelSettings" id="LabelSettings_yv3m3"]
 font_size = 75
 font_color = Color(0, 0, 0, 1)
+outline_size = 20
+shadow_size = 19
+shadow_color = Color(0.0823529, 0.101961, 0.25098, 1)
+shadow_offset = Vector2(5, 3)
 
 [sub_resource type="LabelSettings" id="LabelSettings_pbo4u"]
-font_size = 36
+font_size = 40
+font_color = Color(0, 0, 0, 1)
+outline_size = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_o67iu"]
+font_size = 26
 font_color = Color(0, 0, 0, 1)
 
 [node name="ShopScreen" type="Control"]
@@ -50,8 +60,10 @@ offset_top = 48.0
 offset_right = 181.5
 offset_bottom = 151.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_y1boi")
 text = "THE SHOP"
 label_settings = SubResource("LabelSettings_yv3m3")
+horizontal_alignment = 1
 
 [node name="ShopBack" parent="Box" instance=ExtResource("3_bus4f")]
 layout_mode = 1
@@ -113,5 +125,43 @@ offset_right = 87.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_y1boi")
+theme_override_font_sizes/font_size = 1
 text = "NEW SKIN"
 label_settings = SubResource("LabelSettings_pbo4u")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShopResetPurchases" parent="Box" instance=ExtResource("3_bus4f")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = 217.0
+offset_right = 135.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("5_8oktc")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Box/ShopResetPurchases"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.5
+offset_top = -18.0
+offset_right = 102.5
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Reset Purchases"
+label_settings = SubResource("LabelSettings_o67iu")

@@ -1,12 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://bgujuvfagfese"]
+[gd_scene load_steps=9 format=3 uid="uid://bgujuvfagfese"]
 
 [ext_resource type="Script" path="res://Scripts/base_screen.gd" id="1_2hawg"]
-[ext_resource type="Texture2D" uid="uid://cnm5mv6g7jwr7" path="res://Assets/textures/ui/Box02.png" id="1_a4w5i"]
-[ext_resource type="Texture2D" uid="uid://bcl3w84v321v5" path="res://Assets/textures/ui/PausedText.png" id="2_royac"]
+[ext_resource type="Texture2D" uid="uid://dnkpe8cuglygk" path="res://Assets/textures/ui/Pause_box_02.png" id="2_dm8qc"]
 [ext_resource type="PackedScene" uid="uid://cm1glve212onm" path="res://Scenes/screen_button.tscn" id="3_ruoww"]
-[ext_resource type="Texture2D" uid="uid://qq51g4oyuo6r" path="res://Assets/textures/ui/RestartBtn.png" id="4_ko501"]
-[ext_resource type="Texture2D" uid="uid://dxo5ghht0p4e0" path="res://Assets/textures/ui/menuBtn.png" id="5_y04b5"]
-[ext_resource type="Texture2D" uid="uid://36j08h2mhqmt" path="res://Assets/textures/ui/Closebtn2.png" id="6_dsmgg"]
+[ext_resource type="Texture2D" uid="uid://dbe7d1akwxsf2" path="res://Assets/textures/ui/retry_button_rounded_01.png" id="5_4po8s"]
+[ext_resource type="Texture2D" uid="uid://dofeg5enisg60" path="res://Assets/textures/ui/main_menu_button_rounded_01.png" id="6_crdrm"]
+[ext_resource type="FontFile" uid="uid://cexr5o02afdda" path="res://Assets/fonts/Tiny5-Regular.ttf" id="7_jhdrq"]
+[ext_resource type="Texture2D" uid="uid://bayqv52j23cu7" path="res://Assets/textures/ui/close_button_red_rounded_01.png" id="7_knavf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_o5ope"]
+font_size = 50
+font_color = Color(0.886275, 0.886275, 0.886275, 1)
+outline_size = 4
+outline_color = Color(1, 1, 1, 0)
 
 [node name="PauseScreen" type="Control"]
 layout_mode = 3
@@ -18,7 +24,6 @@ grow_vertical = 2
 script = ExtResource("1_2hawg")
 
 [node name="BlackBg" type="ColorRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,24 +45,27 @@ offset_right = 238.0
 offset_bottom = 179.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_a4w5i")
+texture = ExtResource("2_dm8qc")
 expand_mode = 1
 
-[node name="PauseText" type="TextureRect" parent="PauseBox"]
+[node name="TitleLabel" type="Label" parent="PauseBox"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -174.5
-offset_top = -102.0
-offset_right = 186.5
-offset_bottom = -22.0
+offset_left = -93.5
+offset_top = -117.0
+offset_right = 139.5
+offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_royac")
-expand_mode = 1
+theme_override_fonts/font = ExtResource("7_jhdrq")
+text = "Pausa"
+label_settings = SubResource("LabelSettings_o5ope")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PauseRetry" parent="PauseBox" instance=ExtResource("3_ruoww")]
 layout_mode = 1
@@ -66,13 +74,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -137.5
-offset_top = 16.0
-offset_right = -36.5
-offset_bottom = 117.0
+offset_left = 26.5
+offset_top = 66.0
+offset_right = 100.5
+offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("4_ko501")
+texture_normal = ExtResource("5_4po8s")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -83,13 +91,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 44.5
-offset_top = 16.0
-offset_right = 145.5
-offset_bottom = 117.0
+offset_left = -87.5
+offset_top = 66.0
+offset_right = -8.5
+offset_bottom = 145.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("5_y04b5")
+texture_normal = ExtResource("6_crdrm")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -100,12 +108,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 131.5
-offset_top = -185.0
-offset_right = 204.5
-offset_bottom = -112.0
+offset_left = 148.5
+offset_top = -179.0
+offset_right = 203.5
+offset_bottom = -124.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("6_dsmgg")
+texture_normal = ExtResource("7_knavf")
 ignore_texture_size = true
 stretch_mode = 0

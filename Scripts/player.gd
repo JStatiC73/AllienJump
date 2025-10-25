@@ -9,6 +9,7 @@ signal die
 @export var accelerometer_speed = 130.0
 @export var gravity = 15.0
 @export var jump_velocity = -800
+@export var gravity_factor = 1.0
 var max_fall_velocity = 1000.0
 var viewport_size
 var use_accelerometer = false
@@ -36,7 +37,7 @@ func _process(_delta):
 			#print(animator.animation)
 	
 func _physics_process(_delta):
-	velocity.y += gravity
+	velocity.y += gravity * gravity_factor
 	if velocity.y > max_fall_velocity:
 		velocity.y = max_fall_velocity
 	

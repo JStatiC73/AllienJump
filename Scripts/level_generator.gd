@@ -4,13 +4,14 @@ extends Node2D
 var platform_scene = preload("res://Scenes/platform.tscn")
 
 var start_platform_y
-var y_distance_between_platforms = 300
-var level_size = 50
+var y_distance_between_platforms = 215
+var level_size = 1
 var generated_platform_count = 0
 var viewport_size
 
 var player: Player = null
 var max_x_position
+var player_score = 0
 
 func _ready():
 	viewport_size = get_viewport_rect().size
@@ -39,8 +40,9 @@ func create_platform(location: Vector2):
 	return platform_instance
 
 func generate_level(start_y: float, generate_ground: bool):
-	var platform_width = 173
-	var platform_height = 37
+	DificultyManager.update_difficulty(player_score)
+	var platform_width = 135
+	var platform_height = 30
 	#region Generate the ground
 	if(generate_ground):
 		var platform_y_position = (viewport_size.y - platform_height)
@@ -59,9 +61,24 @@ func generate_level(start_y: float, generate_ground: bool):
 		var location: Vector2
 		location.x = randf_range(0.0, max_x_position)
 		location.y = start_y - (i * y_distance_between_platforms)
-		create_platform(location)
+		
+		var platform_type = "normal"
+		var rand_val = randf()
+		if rand_val < DificultyManager.disappear_platform_chance:
+			platform_type = "disappear"
+		elif rand_val < DificultyManager.disappear_platform_chance + DificultyManager.moving_platform_chance:
+			platform_type = "moving"
+		
+		var platform_instance = create_platform(location)
+		platform_instance.set_type(platform_type)
+		if platform_type == "moving":
+			platform_instance.set_screen_width(viewport_size.x, platform_width)
+			#platform_instance.set_movement_speed(DificultyManager.platform_speed)
 		generated_platform_count += 1
 	#endregion
+
+func set_player_score(_player_score):
+	player_score = _player_score	
 
 func reset_level():
 	for platform in platformParent.get_children():

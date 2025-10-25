@@ -1,12 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://bv72jsaj5g0ou"]
+[gd_scene load_steps=6 format=3 uid="uid://bv72jsaj5g0ou"]
 
-[ext_resource type="Texture2D" uid="uid://c2ck6j5ma3410" path="res://Assets/textures/ui/ScoreBox.png" id="1_8ycbx"]
 [ext_resource type="Script" path="res://Scripts/hud.gd" id="1_rq4u1"]
-[ext_resource type="Texture2D" uid="uid://bolj1l215qn2l" path="res://Assets/textures/ui/PauseBtn.png" id="2_03jtw"]
+[ext_resource type="Texture2D" uid="uid://c0eufh1bsd35h" path="res://Assets/textures/ui/Score_box_01.png" id="2_jyeni"]
+[ext_resource type="FontFile" uid="uid://cexr5o02afdda" path="res://Assets/fonts/Tiny5-Regular.ttf" id="3_v3s8c"]
+[ext_resource type="Texture2D" uid="uid://cx3ggfakae1an" path="res://Assets/textures/ui/pause_button_01.png" id="4_mdtku"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0k34y"]
-font_size = 36
-font_color = Color(0, 0, 0, 1)
+font_size = 40
+font_color = Color(0.886719, 0.886719, 0.886719, 1)
+outline_size = 4
+outline_color = Color(1, 1, 1, 0)
 
 [node name="HUD" type="Control"]
 process_mode = 3
@@ -22,7 +25,7 @@ script = ExtResource("1_rq4u1")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 90.0
+offset_bottom = 95.0
 grow_horizontal = 2
 color = Color(0, 0, 0, 0.45098)
 
@@ -34,33 +37,43 @@ offset_bottom = 90.0
 grow_horizontal = 2
 
 [node name="ScoreBox" type="TextureRect" parent="TopBar"]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 1.0
-offset_right = 317.0
-offset_bottom = 87.0
-texture = ExtResource("1_8ycbx")
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -46.0
+offset_right = 351.0
+offset_bottom = 46.0
+grow_vertical = 2
+texture = ExtResource("2_jyeni")
 expand_mode = 1
 
 [node name="ScoreLabel" type="Label" parent="TopBar"]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 24.0
-offset_right = 294.0
+offset_left = 90.0
+offset_top = 33.0
+offset_right = 322.0
 offset_bottom = 81.0
+theme_override_fonts/font = ExtResource("3_v3s8c")
 text = "99999"
 label_settings = SubResource("LabelSettings_0k34y")
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="PauseButton" type="TextureButton" parent="TopBar"]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -100.0
-offset_bottom = 90.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -67.0
 grow_horizontal = 0
-texture_normal = ExtResource("2_03jtw")
-stretch_mode = 3
+grow_vertical = 0
+texture_normal = ExtResource("4_mdtku")
+ignore_texture_size = true
+stretch_mode = 4
 
 [connection signal="pressed" from="TopBar/PauseButton" to="." method="_on_pause_button_pressed"]
