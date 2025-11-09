@@ -17,16 +17,16 @@ func _ready():
 	game.hud.game_paused.connect(_on_game_paused)
 	screens.reset_purchases.connect(_on_screens_reset_purchases)
 	screens.entry_player_name.connect(on_screens_player_name)
-	
+
 	#region	IAP signal
 	iap_manager.unlock_new_skin.connect(_iap_manager_unlock_new_skin)
 	screens.purchase_skin.connect(_on_screens_purchase_skin)
 	#endregion
-	
+
 func _on_screens_start_game():
 	game_in_progress = true
 	game.new_game()
-	
+
 func _on_player_died(score, scoreList, isHighScore):
 	game_in_progress = false
 	await(get_tree().create_timer(0.75).timeout)
@@ -34,7 +34,7 @@ func _on_player_died(score, scoreList, isHighScore):
 		screens.request_player_name(score, scoreList)
 	else:
 		screens.game_over(score, scoreList)
-		
+
 func on_screens_player_name(player_name, score):
 	game_in_progress = false
 	var scoreList = game.save_player_name(player_name, score)
@@ -44,8 +44,8 @@ func on_screens_player_name(player_name, score):
 func _on_screens_delete_level():
 	game_in_progress = false
 	game.reset_game	()
-	
-	
+
+
 func _on_game_paused():
 	get_tree().paused = true
 	screens.pause_game()
@@ -63,12 +63,12 @@ func _on_window_event(event):
 			get_tree().quit()
 
 
-#region IAP Signal 
+#region IAP Signal
 func _iap_manager_unlock_new_skin():
 	if game.new_skin == false :
 		game.new_skin = true
 		print("Unlocking the new skin...")
-		
+
 func _on_screens_purchase_skin():
 	iap_manager.purchase_skin()
 

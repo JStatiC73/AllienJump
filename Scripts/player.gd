@@ -24,8 +24,8 @@ func _ready():
 	var os_name = OS.get_name()
 	if (os_name == "Android" || os_name == "iOS"):
 		use_accelerometer = true
-		
-	
+
+
 func _process(_delta):
 	if velocity.y > 0:
 		if animator.animation != fall_animation:
@@ -35,12 +35,12 @@ func _process(_delta):
 		if animator.animation != jump_animation:
 			animator.play(jump_animation)
 			#print(animator.animation)
-	
+
 func _physics_process(_delta):
 	velocity.y += gravity * gravity_factor
 	if velocity.y > max_fall_velocity:
 		velocity.y = max_fall_velocity
-	
+
 	if (!dead):
 		if(use_accelerometer):
 			var mobile_input = Input.get_accelerometer()
@@ -50,15 +50,15 @@ func _physics_process(_delta):
 			if direction:
 				velocity.x = direction * speed
 			else:
-				velocity.x = move_toward(velocity.x, 0, speed) 
-	
+				velocity.x = move_toward(velocity.x, 0, speed)
+
 	move_and_slide()
-	
+
 	var margin = 45
 	if global_position.x > viewport_size.x + margin:
 		global_position.x = -margin
 
-		
+
 	if global_position.x < -margin:
 		global_position.x = viewport_size.x + margin
 

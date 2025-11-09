@@ -1,6 +1,6 @@
 [gd_scene load_steps=65 format=3 uid="uid://d0ntc1yw3155e"]
 
-[ext_resource type="Script" path="res://Scripts/player.gd" id="1_kfxwd"]
+[ext_resource type="Script" uid="uid://bju5c70rcwaft" path="res://Scripts/player.gd" id="1_kfxwd"]
 [ext_resource type="Texture2D" uid="uid://bmmqi72mp1c22" path="res://Assets/textures/character/Allien_idle_1.png" id="1_n0vix"]
 [ext_resource type="Texture2D" uid="uid://da58atihs85on" path="res://Assets/textures/character/Allien_idle_02.png" id="2_fadmx"]
 [ext_resource type="Texture2D" uid="uid://d3chp2jgj70fr" path="res://Assets/textures/character/Allien_fall.png" id="2_xn10a"]

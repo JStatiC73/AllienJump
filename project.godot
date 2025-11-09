@@ -66,6 +66,7 @@ reset={
 
 [input_devices]
 
+sensors/enable_accelerometer=true
 pointing/emulate_touch_from_mouse=true
 
 [layer_names]

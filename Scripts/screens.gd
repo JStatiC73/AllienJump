@@ -23,7 +23,7 @@ var score: int = 0
 
 func _ready():
 	console.visible = false
-	
+
 	register_buttons()
 	change_screen(titleScreen)
 
@@ -33,56 +33,56 @@ func register_buttons():
 		for button in buttons:
 			if button is ScreenButton:
 				button.clicked.connect(_on_button_pressed)
-				
+
 func _on_button_pressed(button):
 	match button.name:
 		"TitlePlay":
 			change_screen(null)
 			await(get_tree().create_timer(0.50).timeout)
 			start_game.emit()
-		
+
 		"TitleShop":
 			change_screen(shopScreen)
-			
+
 		"PauseClose":
 			change_screen(null)
 			await(get_tree().create_timer(0.75).timeout)
 			get_tree().paused = false
-			
+
 		"PauseRetry":
 			change_screen(null)
 			await(get_tree().create_timer(0.50).timeout)
 			get_tree().paused = false
 			start_game.emit()
-			
+
 		"PauseBack":
 			change_screen(titleScreen)
 			await(get_tree().create_timer(0.50).timeout)
 			get_tree().paused = false
 			delete_level.emit()
-			
+
 		"GameOverRetry":
 			change_screen(null)
 			await(get_tree().create_timer(0.50).timeout)
 			start_game.emit()
-			
+
 		"GameOverBack":
 			delete_level.emit()
 			change_screen(titleScreen)
-			
+
 		"ShopBack":
 			change_screen(titleScreen)
-			
+
 		"ShopPurchaseSkin":
 			purchase_skin.emit()
-			
+
 		"ShopResetPurchases":
 			reset_purchases.emit()
-			
+
 		"SavePlayerName":
 			change_screen(null)
 			save_player_name()
-	
+
 func _process(_delta):
 	pass
 
@@ -96,7 +96,7 @@ func change_screen(new_screen):
 		await(disappear_tween.finished)
 		current_screen.visible = false
 	current_screen = new_screen
-	
+
 	if(current_screen != null):
 		var appear_tween = current_screen.appear()
 		await(appear_tween.finished)
@@ -109,7 +109,7 @@ func game_over(_score, _scores):
 	for storeScore in _scores:
 		scoreList += str(scoreCounter) + ". " + storeScore.name + ": " + str(storeScore.score) + "\n"
 		scoreCounter += 1
-	
+
 	game_over_highScore_label.text = scoreList
 	change_screen(gameOverScreen)
 
@@ -117,7 +117,7 @@ func request_player_name(_score, _scoreList):
 	score = _score
 	scores = _scoreList
 	change_screen(entryNameScreen)
-	
+
 func save_player_name():
 	var player_name = entryNameScreenLineEdit.text
 	entry_player_name.emit(player_name, score)

@@ -14,12 +14,11 @@ metadata/_edit_vertical_guides_ = [0.0]
 metadata/_edit_horizontal_guides_ = [-25.0]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(66, 27)
+position = Vector2(-2, 21)
 scale = Vector2(0.78, 0.78)
 texture = ExtResource("2_2yh1e")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(67.25, 6)
 shape = SubResource("RectangleShape2D_lay5k")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
