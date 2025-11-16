@@ -2,9 +2,9 @@ extends Area2D
 
 class_name	Platform
 
-var movingPlatform
-var disapearPlatform
-var counterPlatform
+@onready var sprite = $Sprite2D  
+@onready var collision_shape = $CollisionShape2D
+
 var platform_type = "normal"
 var base_position: Vector2
 var amplitude: float = 100.0
@@ -12,28 +12,81 @@ var movement_speed: float = 1.0
 var platform_width: float = 135.0
 var screen_width: float = 0.0
 
+# Variables para plataformas que desaparecen
+var is_disappearing := false
+var disappear_timer := 0.0
+var disappear_delay := 0.3  # Segundos antes de desaparecer
+
+# Variables para efectos visuales
+var original_modulate: Color
+
 func _ready():
 	base_position = position
+	original_modulate = modulate
+	update_visual_by_type()
 
-func set_screen_width(width, _platform_width):
+func set_screen_width(width: float, _platform_width: float):
 	platform_width = _platform_width
 	screen_width = width
-	amplitude = (screen_width - platform_width)
+	amplitude = (screen_width - platform_width) / 2
 
 func set_type(type:String):
 	platform_type = type
+	update_visual_by_type()
+
+func update_visual_by_type():
+	"""Actualiza el aspecto visual según el tipo de plataforma"""
+	match platform_type:
+		"disappear":
+			modulate = Color(1.0, 0.8, 0.8)  # Tono rojizo
+		"moving":
+			modulate = Color(0.8, 0.8, 1.0)  # Tono azulado
+		"spring":
+			modulate = Color(0.8, 1.0, 0.8)  # Tono verdoso
+		"normal":
+			modulate = Color(1.0, 1.0, 1.0)  # Normal
 
 func set_movement_speed(speed: int):
 	movement_speed = speed
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	if platform_type == "moving":
-		position.x = base_position.x + amplitude * sin(Time.get_ticks_msec() / 500.0)
-		position.x = clampf(position.x, (platform_width/2), screen_width - (platform_width / 2))
+		# Movimiento sinusoidal horizontal
+		position.x = base_position.x + amplitude * sin(Time.get_ticks_msec() / (1000.0 / movement_speed))
+		position.x = clampf(position.x, 0.0, screen_width - platform_width)
+	
+	# Manejo de desaparición gradual
+	if is_disappearing:
+		disappear_timer += delta
+		# Efecto visual de parpadeo
+		modulate.a = 1.0 - (disappear_timer / disappear_delay)
+		
+		if disappear_timer >= disappear_delay:
+			queue_free()
 
 func _on_body_entered(body):
 	if body is Player:
+		# Solo rebotar si está cayendo
 		if body.velocity.y > 0:
 			body.jump()
-			if platform_type == "disappear":
-				queue_free() #Se elimina la plataforma al tocarla
+			
+			# Efecto específico según tipo
+			match platform_type:
+				"disappear":
+					start_disappear()
+				"spring":
+					# Salto extra alto (implementar después)
+					body.velocity.y *= 1.5
+				"moving":
+					# Feedback visual de rebote
+					var tween = create_tween()
+					tween.tween_property(self, "scale", Vector2(1.1, 0.9), 0.1)
+					tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.1)
+
+func start_disappear():
+	"""Inicia el proceso de desaparición de la plataforma"""
+	if not is_disappearing:
+		is_disappearing = true
+		disappear_timer = 0.0
+		# Desactivar colisión inmediatamente para evitar rebotes múltiples
+		collision_shape.set_deferred("disabled", true)
