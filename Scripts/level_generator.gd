@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var platformParent = $PlatformParent
 var platform_scene = preload("res://Scenes/platform.tscn")
+# var powerup_scene = preload("res://Scenes/powerup.tscn")
 
 var start_platform_y
 var level_size = 1
@@ -16,6 +17,11 @@ var player_score = 0
 var last_platform_y := 0.0
 var last_platform_x := 0.0
 var platforms_since_safe := 0  # Contador para garantizar plataformas seguras
+
+# Constantes de diseño de nivel
+const PLATFORM_WIDTH := 135.0
+const PLATFORM_HEIGHT := 30.0
+const MIN_VERTICAL_SPACING := 100.0 # Espacio mínimo para evitar superposición
 
 func _ready():
 	viewport_size = get_viewport_rect().size
@@ -50,15 +56,14 @@ func create_platform(location: Vector2):
 
 func generate_level(start_y: float, generate_ground: bool):
 	DificultyManager.update_difficulty(player_score)
-	var platform_width = 135
-	var platform_height = 30
+
 	#region Generate the ground
 	if(generate_ground):
-		var platform_y_position = (viewport_size.y - platform_height)
-		var ground_layer_platform_count = int(viewport_size.x / platform_width) + 1
+		var platform_y_position = (viewport_size.y - PLATFORM_HEIGHT)
+		var ground_layer_platform_count = int(viewport_size.x / PLATFORM_WIDTH) + 1
 
 		for i in range(ground_layer_platform_count):
-			var ground_location = Vector2((i * platform_width), platform_y_position)
+			var ground_location = Vector2((i * PLATFORM_WIDTH), platform_y_position)
 			var platform_instance = create_platform(ground_location)
 			platform_instance.set_type("normal")
 
@@ -67,7 +72,8 @@ func generate_level(start_y: float, generate_ground: bool):
 	#endregion
 
 	#region Level generate
-	max_x_position = viewport_size.x - platform_width
+	max_x_position = viewport_size.x - PLATFORM_WIDTH
+	var current_y = start_y
 
 	for i in range(level_size):
 		# Usar distancias dinámicas del DifficultyManager
@@ -76,11 +82,15 @@ func generate_level(start_y: float, generate_ground: bool):
 			DificultyManager.max_distance_between_platforms
 		)
 
+		# Asegurar espacio mínimo vertical para evitar superposición
+		y_distance = max(y_distance, MIN_VERTICAL_SPACING)
+
 		var location: Vector2
-		location.y = start_y - (i * y_distance)
+		current_y -= y_distance
+		location.y = current_y
 
 		# Generación mas inteligente de posición x
-		location.x = generate_smart_x_position(platform_width)
+		location.x = generate_smart_x_position()
 
 		# Determinar tipo de plataforma
 		var platform_type = determine_platform_type()
@@ -89,9 +99,9 @@ func generate_level(start_y: float, generate_ground: bool):
 		platform_instance.set_type(platform_type)
 
 		if platform_type == "moving":
-			platform_instance.set_screen_width(viewport_size.x, platform_width)
+			platform_instance.set_screen_width(viewport_size.x, PLATFORM_WIDTH)
 			platform_instance.set_movement_speed(
-				DificultyManager.platform_speed * DificultyManager.platform_speed_multiplier
+				DificultyManager.get_platform_movement_speed()
 			)
 
 		# Actualizar último estado
@@ -104,13 +114,18 @@ func generate_level(start_y: float, generate_ground: bool):
 		#	spawn_powerup(location)
 	#endregion
 
-func generate_smart_x_position(platform_width: float) -> float:
+func generate_smart_x_position() -> float:
 	"""Genera posiciones X que garantizan que sean alcanzables"""
-	var max_horizontal_distance = 200  # Distancia máxima horizontal que el jugador puede saltar
+	var max_horizontal_jump = DificultyManager.PLAYER_MAX_HORIZONTAL_REACH  # Distancia máxima horizontal que el jugador puede saltar
 	
 	# Asegurar que no esté demasiado lejos horizontalmente
-	var min_x = max(0, last_platform_x - max_horizontal_distance)
-	var max_x = min(max_x_position, last_platform_x + max_horizontal_distance)
+	var min_x = max(0, last_platform_x - max_horizontal_jump)
+	var max_x = min(max_x_position, last_platform_x + max_horizontal_jump)
+
+	# Si el rango es demasiado pequeño, expandirlo
+	if max_x - min_x < PLATFORM_WIDTH * 2:
+		min_x = 0
+		max_x = max_x_position
 	
 	return randf_range(min_x, max_x)
 
@@ -119,7 +134,7 @@ func determine_platform_type() -> String:
 	
 	# Cada 5 plataformas, garantizar una normal para no hacer el juego imposible
 	platforms_since_safe += 1
-	if platforms_since_safe >= 5:
+	if platforms_since_safe >= 4:
 		platforms_since_safe = 0
 		return "normal"
 	

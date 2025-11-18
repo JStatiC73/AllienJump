@@ -8,7 +8,7 @@ class_name	Platform
 var platform_type = "normal"
 var base_position: Vector2
 var amplitude: float = 100.0
-var movement_speed: float = 1.0
+var movement_speed: float = 0.5
 var platform_width: float = 135.0
 var screen_width: float = 0.0
 
@@ -19,16 +19,18 @@ var disappear_delay := 0.3  # Segundos antes de desaparecer
 
 # Variables para efectos visuales
 var original_modulate: Color
+var time_offset: float = 0.0
 
 func _ready():
 	base_position = position
 	original_modulate = modulate
+	time_offset = randf() * 1000.0
 	update_visual_by_type()
 
 func set_screen_width(width: float, _platform_width: float):
 	platform_width = _platform_width
 	screen_width = width
-	amplitude = (screen_width - platform_width) / 2
+	amplitude = min((screen_width - platform_width) * 0.3, 150.0)
 
 func set_type(type:String):
 	platform_type = type
@@ -36,13 +38,16 @@ func set_type(type:String):
 
 func update_visual_by_type():
 	"""Actualiza el aspecto visual según el tipo de plataforma"""
+	if not sprite:
+		return
+
 	match platform_type:
 		"disappear":
-			modulate = Color(1.0, 0.8, 0.8)  # Tono rojizo
+			modulate = Color(1.0, 0.7, 0.7)  # Tono rojizo
 		"moving":
-			modulate = Color(0.8, 0.8, 1.0)  # Tono azulado
+			modulate = Color(0.7, 0.7, 1.0)  # Tono azulado
 		"spring":
-			modulate = Color(0.8, 1.0, 0.8)  # Tono verdoso
+			modulate = Color(0.7, 1.0, 0.7)  # Tono verdoso
 		"normal":
 			modulate = Color(1.0, 1.0, 1.0)  # Normal
 
@@ -52,7 +57,8 @@ func set_movement_speed(speed: int):
 func _physics_process(delta):
 	if platform_type == "moving":
 		# Movimiento sinusoidal horizontal
-		position.x = base_position.x + amplitude * sin(Time.get_ticks_msec() / (1000.0 / movement_speed))
+		var time_factor = (Time.get_ticks_msec() + time_offset) * 0.001 # Convertir a segundos
+		position.x = base_position.x + amplitude * sin(time_factor * movement_speed)
 		position.x = clampf(position.x, 0.0, screen_width - platform_width)
 	
 	# Manejo de desaparición gradual

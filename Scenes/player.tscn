@@ -441,6 +441,7 @@ size = Vector2(108, 7.5)
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 2
 script = ExtResource("1_kfxwd")
+jump_velocity = -950
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 100
